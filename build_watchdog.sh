@@ -19,7 +19,7 @@ for PLATFORM in "${PLATFORMS[@]}"; do
     fi
     
     echo "  - Building for $OS/$ARCH..."
-    GOOS=$OS GOARCH=$ARCH go build -o "$ASSETS_DIR/$OUTPUT_NAME" ./cmd/watchdog/main.go
+    GOOS=$OS GOARCH=$ARCH go build -o "$ASSETS_DIR/$OUTPUT_NAME" ./cmd/watchdog
 done
 
 echo "Done. Binaries are in $ASSETS_DIR"
