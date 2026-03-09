@@ -9,7 +9,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
-	"syscall"
 )
 
 //go:embed internal/assets/*
@@ -80,11 +79,7 @@ type Process struct {
 
 // Kill terminates the process and all its children by killing the process group.
 func (p *Process) Kill() error {
-	if p == nil || p.Process == nil {
-		return os.ErrInvalid
-	}
-	// Kill the process group by passing the negative PID
-	return syscall.Kill(-p.Pid, syscall.SIGKILL)
+	return killProcess(p)
 }
 
 // Command returns a Cmd struct to execute the named program with the given arguments.
@@ -100,10 +95,7 @@ func CommandContext(ctx context.Context, name string, arg ...string) *Cmd {
 	setupCmd(cmd)
 	// Ensure that when context is cancelled, the entire process group is killed.
 	cmd.Cancel = func() error {
-		if cmd.Process != nil {
-			return syscall.Kill(-cmd.Process.Pid, syscall.SIGKILL)
-		}
-		return nil
+		return killProcess(&Process{Process: cmd.Process})
 	}
 	return &Cmd{Cmd: cmd}
 }

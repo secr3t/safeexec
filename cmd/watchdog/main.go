@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"os/signal"
-	"syscall"
 )
 
 func main() {
@@ -19,7 +17,7 @@ func main() {
 	}
 
 	// We ignore common signals to stay alive until the parent bridge breaks
-	signal.Ignore(syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM)
+	ignoreSignals()
 
 	// Watchdog logic: Wait for Stdin to close.
 	// When the parent dies, the write end of the pipe (inherited as Stdin) will close.
@@ -27,7 +25,7 @@ func main() {
 
 	// Stdin closed -> Parent is gone.
 	// Kill the process group.
-	_ = syscall.Kill(-*pgid, syscall.SIGKILL)
+	killProcessGroup(*pgid)
 
 	os.Exit(0)
 }

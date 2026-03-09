@@ -19,3 +19,11 @@ func setupCmd(cmd *exec.Cmd) {
 	// This is handled by the kernel.
 	setPlatformSpecificSysProcAttr(cmd.SysProcAttr)
 }
+
+func killProcess(p *Process) error {
+	if p == nil || p.Process == nil {
+		return nil
+	}
+	// Kill the process group by passing the negative PID
+	return syscall.Kill(-p.Pid, syscall.SIGKILL)
+}

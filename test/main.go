@@ -5,7 +5,7 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/user/safeexec"
+	"github.com/secr3t/safeexec"
 )
 
 func main() {
