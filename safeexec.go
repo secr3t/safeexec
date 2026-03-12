@@ -136,6 +136,7 @@ func (c *Cmd) startWatchdog() error {
 	c.pipeWriter = w
 
 	watchdog := exec.Command(path, "-pgid", fmt.Sprintf("%d", c.Cmd.Process.Pid))
+	setupWatchdogCmd(watchdog)
 	watchdog.Stdin = r
 	if err := watchdog.Start(); err != nil {
 		r.Close()

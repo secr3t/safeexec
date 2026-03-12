@@ -27,3 +27,7 @@ func killProcess(p *Process) error {
 	// Kill the process group by passing the negative PID
 	return syscall.Kill(-p.Pid, syscall.SIGKILL)
 }
+
+func setupWatchdogCmd(cmd *exec.Cmd) {
+	// Do nothing for Unix
+}
